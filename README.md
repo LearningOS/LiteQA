@@ -1,4 +1,5 @@
-# README
+# LiteQA
+LiteQA-Light Question and Answer System
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
