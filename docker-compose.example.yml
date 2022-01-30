@@ -1,0 +1,74 @@
+version: "3"
+
+services:
+  postgresql:
+    container_name: "liteqa_postgresql"
+    image: postgres:alpine
+    restart: always
+    ports:
+      - "5432"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - liteqa_db:/var/lib/postgresql/data
+
+  redis:
+    container_name: "liteqa_redis"
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379"
+    volumes:
+      - liteqa_redis:/data
+
+  meilisearch:
+    container_name: "liteqa_meilisearch"
+    image: getmeili/meilisearch:latest
+    restart: always
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+    ports:
+      - "7700"
+    volumes:
+      - liteqa_ms:/data.ms
+
+  web:
+    container_name: "liteqa_web"
+    build: .
+    restart: always
+    environment:
+      - RAILS_LOG_TO_STDOUT=true
+      - RAILS_SERVE_STATIC_FILES=true
+      - DATABASE_URL=postgres://postgres:@postgresql:5432/liteqa
+      - REDIS_URL=redis://redis:6379/1
+      - REDIS_SESSION_URL=redis://redis:6379/2/session
+      - WEB_CONCURRENCY=2
+      - RAILS_MIN_THREADS=8
+      - RAILS_MAX_THREADS=16
+      - DB_MAX_THREADS=32
+    links:
+      - postgresql
+      - redis
+      - meilisearch
+    logging:
+      options:
+        max-size: "50m"
+        max-file: "10"
+    volumes:
+      - ./storage:/home/app/storage
+      - ./log:/home/app/log
+      - ./tmp:/home/app/tmp
+      - ./data:/home/app/data
+    command:
+      - sh
+      - -c
+      - |
+        rake db:migrate 2>/dev/null || rake db:setup
+        bundle exec puma -C config/puma.rb
+    ports:
+      - "3000:3000"
+
+volumes:
+  liteqa_db:
+  liteqa_ms:
+  liteqa_redis:
