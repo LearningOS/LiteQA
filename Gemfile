@@ -75,3 +75,5 @@ gem "devise", "~> 4.8"
 gem "auto_increment", "~> 1.5"
 
 gem "jsonpath", "~> 1.1"
+
+gem "commonmarker", "~> 0.23.2"

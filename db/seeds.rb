@@ -11,28 +11,43 @@ piazza_post_file = -> id { "#{Rails.root}/data/piazza-data/#{id}.json" }
 if File.exist?(piazza_feed_file)
   piazza_feed = File.read(piazza_feed_file)
 
-  Tag.insert_all(
+  puts "add tags"
+  tags = Tag.insert_all(
     JsonPath.on(piazza_feed, "$.result.tags.instructor[*]").map { {name: _1} }
   )
+  puts "added #{tags.rows.size} tags."
 
+  print "import posts "
   JsonPath.on(piazza_feed, "$.result.feed[*]").each do |feed|
     post_id = feed["nr"]
-    puts "load post #{post_id}"
+
     post_json =
       if File.exist? piazza_post_file[post_id]
         File.read(piazza_post_file[post_id])
       end || "{}"
+
+    content = ""
+    unless post_json.blank?
+      content = JsonPath.on(post_json, "$.result.history[0].content")[0]
+      if content.start_with? "<md>"
+        content = CommonMarker.render_html(content.delete_prefix("<md>").delete_suffix("</md>"), :DEFAULT)
+        print "m"
+      end
+    end
+
     Post.create!(
-      title: feed["subject"],
+      title: Nokogiri::HTML.parse(feed["subject"]).text,
       tags: feed["folders"].map { Tag.find_or_create_by!(name: _1) },
       raw_feed: feed,
       raw_post: JSON.parse(post_json),
       cid: post_id,
       post_type: feed["type"],
-      content: JsonPath.on(post_json, "$.result.history[0].content")[0],
+      content: content,
       created_at: JsonPath.on(post_json, "$.result.created")[0],
       updated_at: JsonPath.on(post_json, "$.result.change_log[-1].when")[0]
     )
-  end
 
+    print "."
+  end
+  puts
 end
