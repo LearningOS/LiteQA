@@ -14,6 +14,14 @@
   </head>
 
   <body>
-    <%= yield %>
+    <%= render "shared/navbar" %>
+
+    <%= turbo_frame_tag "flash", class: "dark:text-gray-200 min-w-8 hidden sm:block" do %>
+      <%= render "shared/flash" %>
+    <% end %>
+
+    <div role="main" class="">
+      <%= yield %>
+    </div>
   </body>
 </html>
