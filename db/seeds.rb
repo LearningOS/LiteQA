@@ -13,7 +13,7 @@ if File.exist?(piazza_feed_file)
 
   puts "add tags"
   tags = Tag.insert_all(
-    JsonPath.on(piazza_feed, "$.result.tags.instructor[*]").map { {name: _1} }
+    JsonPath.on(piazza_feed, "$.result.tags.instructor_upd")[0].keys.map { {name: _1} }
   )
   puts "added #{tags.rows.size} tags."
 
@@ -35,10 +35,7 @@ if File.exist?(piazza_feed_file)
       end
     end
 
-    post_tags = feed["folders"].map { Tag.find_or_create_by!(name: _1) }
-    if feed["bucket_name"] == "Pinned"
-      post_tags << Tag.find_or_create_by!(name: "pin")
-    end
+    post_tags = feed["tags"].map { Tag.find_or_create_by!(name: _1) }
 
     Post.create!(
       title: Nokogiri::HTML.parse(feed["subject"]).text,
