@@ -77,3 +77,7 @@ gem "auto_increment", "~> 1.5"
 gem "jsonpath", "~> 1.1"
 
 gem "commonmarker", "~> 0.23.2"
+
+gem "pagy", "~> 5.9"
+
+gem "view_component", "~> 2.48"

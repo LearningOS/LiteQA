@@ -1,13 +1,34 @@
 <div class="flex flex-row bg-base-100"
      data-controller="split"
-     data-split-elements-value='["#posts_list","#content_wrapper"]'
+     data-split-elements-value='["#posts_feed","#content_wrapper"]'
      data-split-min-size-value="[300,300]"
      data-split-max-size-value="[450,10000]"
      data-split-sizes-value="[30,70]"
 >
-  <div class="bg-base-200 relative h-[calc(100vh-4rem)]" id="posts_list">
+  <div class="bg-base-200 relative h-[calc(100vh-4rem)]" id="posts_feed">
     <%= link_to "New post", new_post_path, class: "btn btn-sm m-2" %>
-    <div id="posts" class="absolute bottom-0 w-full h-[calc(100%-3rem)] overflow-y-scroll overflow-x-clip">
+    <turbo-frame id="posts" class="block absolute bottom-0 w-full h-[calc(100%-3rem)] overflow-y-scroll overflow-x-clip">
+      <% if @pinned_posts %>
+        <div data-controller='toggle' class="">
+          <div data-action='click->toggle#toggle touch->toggle#toggle' class="px-2 py-1 bg-neutral text-neutral-content text-xs font-medium">
+            pinned
+          </div>
+          <div data-toggle-target='toggleable' class="bg-base-100">
+            <% @pinned_posts.each do |post| %>
+              <%= link_to(post, {class: "block", "data-turbo-frame": "content_wrapper"}) do %>
+                <div id="<%= dom_id post %>" class="pl-6 pr-2 py-1.5 border-b-2 border-base-300">
+                  <div class="text-sm font-bold truncate">
+                    <%= post.title %>
+                  </div>
+                  <div class="text-sm">
+                    <%= truncate(Nokogiri::HTML.parse(post.content).text, length: 80) %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
       <% @posts
            .group_by { _1.created_at }
            .group_by { |d, _| d.at_beginning_of_week }
@@ -16,7 +37,7 @@
            .each do |date, day_with_posts| %>
         <div data-controller='toggle' class="">
           <div data-action='click->toggle#toggle touch->toggle#toggle' class="px-2 py-1 bg-neutral text-neutral-content text-xs font-medium">
-            <%= date.strftime("%G/%m/%d - Week %V") %>
+            <%= date.strftime("%m-%d - %G Week %V") %>
           </div>
           <div data-toggle-target='toggleable' class="bg-base-100">
             <% day_with_posts.to_h.values.each do |post| %>
@@ -35,7 +56,12 @@
           </div>
         </div>
       <% end %>
-    </div>
+      <% if @pagy.next %>
+        <%= turbo_frame_tag "posts", loading: :lazy, src: posts_path(page: @pagy.next) do %>
+          <!--- put your loading prompt and/or spinner here --->
+        <% end %>
+      <% end %>
+    </turbo-frame>
   </div>
   <turbo-frame id="content_wrapper" class="px-6 py-4 h-[calc(100vh-4rem)] overflow-y-auto">
 

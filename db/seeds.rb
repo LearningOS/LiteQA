@@ -35,9 +35,14 @@ if File.exist?(piazza_feed_file)
       end
     end
 
+    post_tags = feed["folders"].map { Tag.find_or_create_by!(name: _1) }
+    if feed["bucket_name"] == "Pinned"
+      post_tags << Tag.find_or_create_by!(name: "pin")
+    end
+
     Post.create!(
       title: Nokogiri::HTML.parse(feed["subject"]).text,
-      tags: feed["folders"].map { Tag.find_or_create_by!(name: _1) },
+      tags: post_tags,
       raw_feed: feed,
       raw_post: JSON.parse(post_json),
       cid: post_id,

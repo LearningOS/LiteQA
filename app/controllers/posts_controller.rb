@@ -3,7 +3,8 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all
+    @pinned_posts = Post.includes(:tags).where(tags: {name: "pin"})
+    @pagy, @posts = pagy(Post.all.order(created_at: :desc))
   end
 
   # GET /posts/1 or /posts/1.json
