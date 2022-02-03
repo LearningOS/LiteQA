@@ -9,4 +9,12 @@ class Post < ApplicationRecord
   auto_increment :cid, model_scope: nil, force: false, lock: true, before: :create
 
   store_accessor  :payload, :raw_post, :raw_feed
+
+  default_scope { order(created_at: :desc) }
+  scope :pinned, -> { includes(:tags).where(tags: {name: "pin"}) }
+  scope :unpinned, -> { includes(:tags).where.not(tags: {name: "pin"}) }
+
+  def instructor_note?
+    tags.where(name: "instructor-note").any?
+  end
 end

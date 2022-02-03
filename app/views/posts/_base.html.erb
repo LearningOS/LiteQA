@@ -1,12 +1,12 @@
 <div class="flex flex-row bg-base-100"
      data-controller="split"
-     data-split-elements-value='["#posts_feed","#content_wrapper"]'
+     data-split-elements-value='["#posts_feed","#main_frame"]'
      data-split-min-size-value="[300,300]"
      data-split-max-size-value="[450,10000]"
      data-split-sizes-value="[30,70]"
 >
   <div class="bg-base-200 relative h-[calc(100vh-4rem)]" id="posts_feed">
-    <%= link_to "New post", new_post_path, class: "btn btn-sm m-2" %>
+    <%= link_to "New post", new_post_path, class: "btn btn-primary btn-sm m-2", data: { "turbo-frame": "main_frame" } %>
     <turbo-frame id="posts" class="block absolute bottom-0 w-full h-[calc(100%-3rem)] overflow-y-scroll overflow-x-clip">
       <% if @pinned_posts %>
         <div data-controller='toggle' class="">
@@ -15,16 +15,7 @@
           </div>
           <div data-toggle-target='toggleable' class="bg-base-100">
             <% @pinned_posts.each do |post| %>
-              <%= link_to(post, {class: "block", "data-turbo-frame": "content_wrapper"}) do %>
-                <div id="<%= dom_id post %>" class="pl-6 pr-2 py-1.5 border-b-2 border-base-300">
-                  <div class="text-sm font-bold truncate">
-                    <%= post.title %>
-                  </div>
-                  <div class="text-sm">
-                    <%= truncate(Nokogiri::HTML.parse(post.content).text, length: 80) %>
-                  </div>
-                </div>
-              <% end %>
+              <%= render PostFeedItemComponent.new(post: post) %>
             <% end %>
           </div>
         </div>
@@ -42,15 +33,8 @@
           <div data-toggle-target='toggleable' class="bg-base-100">
             <% day_with_posts.to_h.values.each do |post| %>
               <% post = post[0] %>
-              <%= link_to(post, {class: "block", "data-turbo-frame": "content_wrapper"}) do %>
-                <div id="<%= dom_id post %>" class="pl-6 pr-2 py-1.5 border-b-2 border-base-300">
-                  <div class="text-sm font-bold truncate">
-                    <%= post.title %>
-                  </div>
-                  <div class="text-sm">
-                    <%= truncate(Nokogiri::HTML.parse(post.content).text, length: 80) %>
-                  </div>
-                </div>
+              <%= link_to(post, {class: "block", "data-turbo-frame": "main_frame"}) do %>
+                <%= render PostFeedItemComponent.new(post: post) %>
               <% end %>
             <% end %>
           </div>
@@ -63,7 +47,7 @@
       <% end %>
     </turbo-frame>
   </div>
-  <turbo-frame id="content_wrapper" class="px-6 py-4 h-[calc(100vh-4rem)] overflow-y-auto">
+  <turbo-frame id="main_frame" class="px-6 py-4 h-[calc(100vh-4rem)] overflow-y-auto">
 
   </turbo-frame>
 </div>
