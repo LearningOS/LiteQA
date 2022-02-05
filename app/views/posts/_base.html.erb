@@ -6,7 +6,7 @@
      data-split-sizes-value="[30,70]"
 >
   <div class="bg-base-200 relative h-[calc(100vh-4rem)]" id="posts_feed">
-    <%= link_to "New post", new_post_path, class: "btn btn-primary btn-sm m-2", data: { "turbo-frame": "main_frame" } %>
+    <%= link_to "New post", new_post_path, class: "btn btn-primary btn-sm m-2", data: { "turbo-frame": "main_frame", "turbo-action": "advance" } %>
     <turbo-frame id="posts" class="block absolute bottom-0 w-full h-[calc(100%-3rem)] overflow-y-scroll overflow-x-clip">
       <% if @pinned_posts %>
         <div data-controller='toggle' class="">
@@ -33,9 +33,7 @@
           <div data-toggle-target='toggleable' class="bg-base-100">
             <% day_with_posts.to_h.values.each do |post| %>
               <% post = post[0] %>
-              <%= link_to(post, {class: "block", "data-turbo-frame": "main_frame"}) do %>
-                <%= render PostFeedItemComponent.new(post: post) %>
-              <% end %>
+              <%= render PostFeedItemComponent.new(post: post) %>
             <% end %>
           </div>
         </div>
@@ -48,6 +46,6 @@
     </turbo-frame>
   </div>
   <turbo-frame id="main_frame" class="px-6 py-4 h-[calc(100vh-4rem)] overflow-y-auto">
-
+    <%= yield %>
   </turbo-frame>
 </div>

@@ -35,7 +35,9 @@ if File.exist?(piazza_feed_file)
       end
     end
 
-    post_tags = feed["tags"].map { Tag.find_or_create_by!(name: _1) }
+    post_tags = feed["folders"].map { Tag.find_or_create_by!(name: _1) }
+    pin = feed["tags"].include? "pin"
+    instructor_note = feed["tags"].include? "instructor-note"
 
     Post.create!(
       title: Nokogiri::HTML.parse(feed["subject"]).text,
@@ -46,7 +48,9 @@ if File.exist?(piazza_feed_file)
       post_type: feed["type"],
       content: content,
       created_at: JsonPath.on(post_json, "$.result.created")[0],
-      updated_at: JsonPath.on(post_json, "$.result.change_log[-1].when")[0]
+      updated_at: JsonPath.on(post_json, "$.result.change_log[-1].when")[0],
+      pin: pin,
+      instructor_note: instructor_note
     )
 
     print "."

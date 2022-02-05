@@ -1,12 +1,9 @@
-
-<turbo-frame id="main_frame">
+<%= render layout: "posts/base" do %>
   <%= render @post %>
-</turbo-frame>
+  <div>
+    <%= link_to "Edit this post", edit_post_path(@post) %> |
+    <%= link_to "Back to posts", posts_path %>
 
-
-<div>
-  <%= link_to "Edit this post", edit_post_path(@post) %> |
-  <%= link_to "Back to posts", posts_path %>
-
-  <%= button_to "Destroy this post", @post, method: :delete %>
-</div>
+    <%= button_to "Destroy this post", @post, method: :delete %>
+  </div>
+<% end %>

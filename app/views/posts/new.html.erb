@@ -1,11 +1,11 @@
-<turbo-frame id="main_frame" class="block">
-<h1>New post</h1>
+<%= render layout: "posts/base" do %>
+  <h1>New post</h1>
 
-<%= render "form", post: @post %>
+  <%= render "form", post: @post %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Back to posts", posts_path %>
-</div>
-</turbo-frame>
+  <div>
+    <%= link_to "Back to posts", posts_path %>
+  </div>
+<% end %>

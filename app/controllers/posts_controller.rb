@@ -1,10 +1,9 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[ show edit update destroy ]
+  before_action :set_posts, only: %i[ index show new edit ]
 
   # GET /posts or /posts.json
   def index
-    @pinned_posts = Post.pinned unless params[:page]
-    @pagy, @posts = pagy(Post.unpinned.all)
   end
 
   # GET /posts/1 or /posts/1.json
@@ -59,13 +58,19 @@ class PostsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def post_params
-      params.require(:post).permit(:title, :content)
-    end
+  def set_posts
+    @pinned_posts = Post.pinned unless params[:page]
+    @pagy, @posts = pagy(Post.unpinned, items: 100)
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def post_params
+    params.require(:post).permit(:title, :content)
+  end
 end
