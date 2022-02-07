@@ -5,8 +5,8 @@
 
 <br>
 
-<div>
-  <%= link_to "Show this post", @post %> |
-  <%= link_to "Back to posts", posts_path %>
+<div class="flex flex-row gap-3">
+  <%= link_to "Show this post", @post, data: { "turbo-frame": "_top" } %>
+  <%= link_to "Back to posts", posts_path, data: { "turbo-frame": "_top" } %>
 </div>
 <% end %>

@@ -1,4 +1,4 @@
-<%= form_with(model: post) do |form| %>
+<%= form_with model: post, data: { "turbo-frame": "_top" } do |form| %>
   <% if post.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
@@ -11,14 +11,14 @@
     </div>
   <% end %>
 
-  <div>
+  <div class="form-control">
     <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, class: "input p-2 input-bordered" %>
   </div>
 
-  <div>
+  <div class="form-control">
     <%= form.label :content, style: "display: block" %>
-    <%= form.text_area :content %>
+    <%= form.text_area :content, class: "textarea textarea-bordered h-56" %>
   </div>
 
   <div>

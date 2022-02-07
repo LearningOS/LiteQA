@@ -1,9 +1,9 @@
-<div id="<%= dom_id post %>" class="border shadow-lg px-3 py-2 rounded-md">
-  <div class="font-medium text-xl mb-2">
+<div id="<%= dom_id post %>" class="border shadow-lg px-3 py-2 rounded-md flex flex-col gap-2">
+  <div class="font-medium text-xl">
     <%= post.title %>
   </div>
 
-  <div class="mb-2">
+  <div class="break-words">
     <div class="porse prose-sm prose-stone dark:prose-invert">
       <%== post.content %>
     </div>
@@ -15,4 +15,7 @@
     <% end %>
   </div>
 
+  <div class="self-end">
+    Updated <%= time_ago_in_words(post.updated_at) %> ago by <%= post.user || "Unknown" %>
+  </div>
 </div>

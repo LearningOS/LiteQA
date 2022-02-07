@@ -1,9 +1,26 @@
 <%= render layout: "posts/base" do %>
   <%= render @post %>
+  <div class="flex flex-row gap-3 mb-2">
+    <%= link_to "Edit this post", edit_post_path(@post), data: { "turbo-action": "replace" } %>
+    <%= link_to "Back to posts", posts_path, data: { "turbo-frame": "_top" } %>
+    <%= button_to "Destroy this post", @post, method: :delete, data: { "turbo-frame": "_top" } %>
+  </div>
   <div>
-    <%= link_to "Edit this post", edit_post_path(@post) %> |
-    <%= link_to "Back to posts", posts_path %>
-
-    <%= button_to "Destroy this post", @post, method: :delete %>
+    TODO: Separate student answer from followup discussions
+  </div>
+  <div class="flex flex-col border shadow rounded px-3 py-2 gap-3">
+    <div>
+      followup discussions
+    </div>
+    <div>
+      TODO: Add comment
+    </div>
+    <div class="flex flex-col gap-2">
+      <% if @comments&.any? %>
+        <% @comments.where(parent_id: nil).each do |comment| %>
+          <%= render partial: "comments/comment", locals: { comment: comment } %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 <% end %>
