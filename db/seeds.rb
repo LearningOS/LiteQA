@@ -18,6 +18,28 @@ def markdown_to_html(content)
   content
 end
 
+def create_comment(commentable, comment_json)
+  commentable.comments.create!(
+    content: comment_content(comment_json),
+    created_at: comment_json["created"],
+    updated_at: comment_json["updated"],
+    raw_comment: comment_json,
+    type: comment_json["type"],
+  )
+end
+
+def comment_content(comment_json)
+  content = ""
+  if comment_json["type"] == "s_answer"
+    if comment_json["history"]
+      content = markdown_to_html(comment_json["history"][0]["content"])
+    end
+  else
+    content = markdown_to_html(comment_json["subject"])
+  end
+  content
+end
+
 if File.exist?(piazza_feed_file)
   piazza_feed = File.read(piazza_feed_file)
 
@@ -52,22 +74,12 @@ if File.exist?(piazza_feed_file)
     print "p"
 
     JsonPath.on(post_json, "$.result.children[*]").each do |comment_json|
-      post_comment = post.comments.create!(
-        content: markdown_to_html(comment_json["subject"]),
-        created_at: comment_json["created"],
-        updated_at: comment_json["updated"],
-        raw_comment: comment_json
-      )
+      post_comment = create_comment(post, comment_json)
       print "c"
       if comment_json["children"].any?
         comment_json["children"].each do |reply_json|
-          post_comment.comments.create!(
-            content: markdown_to_html(reply_json["subject"]),
-            created_at: reply_json["created"],
-            updated_at: reply_json["updated"],
-            raw_comment: reply_json
-          )
-          print "c"
+          create_comment(post_comment, reply_json)
+          print "d"
         end
       end
     end
