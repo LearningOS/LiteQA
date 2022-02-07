@@ -1,4 +1,7 @@
-<div id="<%= dom_id post %>" class="border shadow-lg px-3 py-2 rounded-md flex flex-col gap-2">
+<div id="<%= dom_id post %>" class="relative border shadow px-3 py-2 rounded-md flex flex-col gap-2 bg-base-200">
+  <div class="absolute top-0 right-0 p-2">
+    cid: <%= post.cid %>
+  </div>
   <div class="font-medium text-xl">
     <%= post.title %>
   </div>
