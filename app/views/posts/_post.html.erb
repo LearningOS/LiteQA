@@ -1,14 +1,18 @@
-<div id="<%= dom_id post %>">
-  <p>
-    <strong>Title:</strong>
+<div id="<%= dom_id post %>" class="border shadow-lg px-3 py-2 rounded-md">
+  <div class="font-medium text-xl mb-2">
     <%= post.title %>
-  </p>
+  </div>
 
-  <p>
-    <strong>Content:</strong>
+  <div class="mb-2">
     <div class="porse prose-sm prose-stone dark:prose-invert">
       <%== post.content %>
     </div>
-  </p>
+  </div>
+
+  <div class="flex flex-row gap-x-2 text-xs">
+    <% post.tags.each do |tag| %>
+      <%= link_to tag.name, "#", class: "border px-1 py-0.5 rounded" %>
+    <% end %>
+  </div>
 
 </div>
