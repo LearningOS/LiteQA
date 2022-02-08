@@ -3,6 +3,10 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  if ENV["SERVER_HOST_NAME"]
+    config.hosts << ENV["SERVER_HOST_NAME"]
+  end
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 
