@@ -48,9 +48,11 @@ class Fixjson:
 
     def run(self,nr,subject,content,tags,bucket_name):
         T=Fixjson.add(subject,content,tags,nr,bucket_name)
+        print(type(T))
+        print(T)
         jsdata=json.dumps(T,ensure_ascii=False,indent=4)
-        filestr="/piazza-data/"+(str(nr))+".json"
-        f=open(filestr,"w",encoding='utf-8')
+        filestr="./piazza-data/"+(str(nr))+".json"
+        f=open(filestr,"w+",encoding='utf-8')
         f.write(jsdata)
         f.close()
 

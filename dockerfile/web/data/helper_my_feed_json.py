@@ -19,6 +19,16 @@ class Fixfeed:
                 cnt=max(cnt,i['nr'])
         cnt+=1
         return cnt
+    def next_nr_json_id_from_name(self,name):
+        f= open(name, encoding='utf-8')
+        res = f.read()
+        f.close()
+        product_dic = json.loads(res)
+        print(type(product_dic))
+        result=product_dic['result']
+        feed=result['feed']
+        return Fixfeed.next_nr_json_id(feed)
+    
     example_feed_1={
         'fol': '通知|','pin': 1,
         'm': 1633497775843,'rq': 0,'id': 'iomfqy3qy2a52l',
@@ -90,9 +100,10 @@ class Fixfeed:
         result['feed']=feed
         product_dic['result']=result
         print(T)
-        
-        jsdata=json.dumps(product_dic,encoding="utf-8")
-        f=open(name, "w",encoding='utf-8')
+        print(len(product_dic))
+        print(type(product_dic))
+        jsdata=json.dumps(product_dic,ensure_ascii=False,indent=4)
+        f=open(name,"w",encoding='utf-8')
         f.write(jsdata)
         f.close()
 
