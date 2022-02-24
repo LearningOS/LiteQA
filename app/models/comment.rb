@@ -4,6 +4,8 @@ class Comment < ApplicationRecord
   belongs_to :parent, optional: true, class_name: "Comment"
   has_many :comments, foreign_key: :parent_id, dependent: :destroy
 
+  has_rich_text :rich_content
+
   store_accessor :payload, :raw_comment, :type
 
   def comments

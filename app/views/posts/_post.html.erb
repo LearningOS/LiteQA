@@ -7,9 +7,22 @@
   </div>
 
   <div class="break-words">
-    <div class="porse prose-sm prose-stone dark:prose-invert">
-      <%== post.content %>
-    </div>
+    <% case post.content_type %>
+    <% when 'rich_content' %>
+      <%= post.rich_content.to_s %>
+    <% when 'markdown' %>
+      <div>
+        <%= post.content %>
+      </div>
+    <% when 'raw' %>
+      <div class="porse prose-sm prose-stone dark:prose-invert">
+        <%== post.content %>
+      </div>
+    <% else %>
+      <div>
+        <%= post.content %>
+      </div>
+    <% end %>
   </div>
 
   <div class="flex flex-row gap-x-2 text-xs">

@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_05_040017) do
+ActiveRecord::Schema.define(version: 2022_02_24_040842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -52,6 +62,7 @@ ActiveRecord::Schema.define(version: 2022_02_05_040017) do
     t.jsonb "payload", default: {}, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "content_type", default: 0, null: false
     t.index ["commentable_id"], name: "index_comments_on_commentable_id"
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
     t.index ["commentable_type"], name: "index_comments_on_commentable_type"
@@ -81,6 +92,7 @@ ActiveRecord::Schema.define(version: 2022_02_05_040017) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "pin", default: false
     t.boolean "instructor_note", default: false
+    t.integer "content_type", default: 0, null: false
     t.index ["instructor_note"], name: "index_posts_on_instructor_note"
     t.index ["payload"], name: "index_posts_on_payload", using: :gin
     t.index ["pin"], name: "index_posts_on_pin"

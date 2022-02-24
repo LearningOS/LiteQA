@@ -25,6 +25,7 @@ def create_comment(commentable, comment_json)
     updated_at: comment_json["updated"],
     raw_comment: comment_json,
     type: comment_json["type"],
+    content_type: "raw",
   )
 end
 
@@ -69,7 +70,8 @@ if File.exist?(piazza_feed_file)
       created_at: JsonPath.on(post_json, "$.result.created")[0],
       updated_at: JsonPath.on(post_json, "$.result.change_log[-1].when")[0],
       pin: feed["tags"].include?("pin"),
-      instructor_note: feed["tags"].include?("instructor-note")
+      instructor_note: feed["tags"].include?("instructor-note"),
+      content_type: "raw",
     )
     print "p"
 

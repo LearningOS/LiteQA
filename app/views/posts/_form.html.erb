@@ -17,8 +17,19 @@
   </div>
 
   <div class="form-control">
-    <%= form.label :content, style: "display: block" %>
-    <%= form.text_area :content, class: "textarea textarea-bordered h-56" %>
+    <% if post.content_type.nil? %>
+      <%= form.label :rich_content, style: "display: block" %>
+      <%= form.rich_text_area :rich_content, class: "trix-content" %>
+    <% else %>
+      <% case post.content_type %>
+      <% when "rich_content" %>
+        <%= form.label :rich_content, style: "display: block" %>
+        <%= form.rich_text_area :rich_content, class: "trix-content" %>
+      <% else %>
+        <%= form.label :content, style: "display: block" %>
+        <%= form.rich_text_area :content, class: "trix-content" %>
+      <% end %>
+    <% end %>
   </div>
 
   <div>
