@@ -1,11 +1,5 @@
-<div class="flex flex-row bg-base-100"
-     data-controller="split"
-     data-split-elements-value='["#posts_feed","#main_frame"]'
-     data-split-min-size-value="[300,300]"
-     data-split-max-size-value="[450,10000]"
-     data-split-sizes-value="[30,70]"
->
-  <div class="bg-base-200 relative h-[calc(100vh-4rem)]" id="posts_feed">
+<div class="flex flex-row bg-base-100">
+  <div class="bg-base-200 relative hidden md:block w-80 xl:w-96 shrink-0 h-[calc(100vh-4rem)]" id="posts_feed">
     <%= link_to "New post", new_post_path, class: "btn btn-primary btn-sm m-2", data: { "turbo-frame": "main_frame", "turbo-action": "advance" } %>
     <turbo-frame id="posts" class="block absolute bottom-0 w-full h-[calc(100%-3rem)] overflow-y-scroll overflow-x-clip">
       <% if @pinned_posts %>
@@ -45,7 +39,7 @@
       <% end %>
     </turbo-frame>
   </div>
-  <turbo-frame id="main_frame" class="px-6 py-4 h-[calc(100vh-4rem)] overflow-y-auto">
+  <turbo-frame id="main_frame" class="grow px-6 py-4 h-[calc(100vh-4rem)] overflow-y-auto">
     <%= yield %>
   </turbo-frame>
 </div>

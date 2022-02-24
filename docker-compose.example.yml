@@ -47,6 +47,7 @@ services:
       - RAILS_MAX_THREADS=16
       - DB_MAX_THREADS=32
       - SERVER_HOST_NAME=example.com
+      - RAILS_MASTER_KEY=changeme
     links:
       - postgresql
       - redis
