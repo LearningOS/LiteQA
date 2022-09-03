@@ -8,7 +8,7 @@
     "@tailwindcss/typography": "^0.5.1",
     "autoprefixer": "^10.4.2",
     "daisyui": "^2.2.0",
-    "marked": "^4.0.12",
+    "marked": "^4.0.19",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^14.0.2",
     "postcss-preset-env": "^7.2.3",
@@ -16,10 +16,10 @@
     "tailwindcss": "^3.0.18",
     "tailwindcss-stimulus-components": "^3.0.3",
     "trix": "^2.0.0-alpha.1",
-    "vite": "^2.7.7",
+    "vite": "^3.0.0",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-full-reload": "^1.0.0",
-    "vite-plugin-ruby": "^3.0.5",
+    "vite-plugin-ruby": "^3.1.0",
     "vite-plugin-stimulus-hmr": "^3.0.0"
   }
 }
