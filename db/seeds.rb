@@ -48,7 +48,14 @@ end
 def img_to_attachment(record, attr_name)
   rich_text = record.send(attr_name)
   if rich_text && rich_text.body.to_s =~ /(<img src="(\S+)?".+?>)/
-    rich_text.body.to_s.scan(/(<img src="(\S+)?".+?>)/).each do |tag, path|
+    body = rich_text.body.to_html
+    body.scan(/(<img src="(\S+)?".+?>)/).each do |tag, path|
+      if path.start_with?("/redirect/")
+        uri = path
+        path = "/img/#{SecureRandom.uuid}.#{path.split('.')[-1]}"
+        puts uri
+        `curl -o "#{Rails.root}/data#{path}" -L "https://piazza.com#{uri}"`
+      end
       if File.exist?("#{Rails.root}/data#{path}")
         filename = File.basename(path)
         blob = ActiveStorage::Blob.create_and_upload!(
@@ -58,12 +65,12 @@ def img_to_attachment(record, attr_name)
         blob.analyze
         image_path = Rails.application.routes.url_helpers.rails_blob_path(blob, only_path: true)
         attachment = ActionText::Attachment.from_attachable(blob)
-        rich_text.update(body: ActionText::Content.new(
-          rich_text.body.to_s.gsub(tag, attachment.to_html.gsub(/(filename=\"#{filename}\")/, "url=\"#{image_path}\" #{$1}"))
-        ))
+
         print('i')
+        body.gsub!(tag, attachment.to_html)  # .gsub(/(filename=\"#{filename}\")/, " url=\"#{image_path}\" #{$1} ")
       end
     end
+    rich_text.update(body: ActionText::Content.new(body))
   end
 end
 
@@ -105,6 +112,7 @@ if File.exist?(piazza_feed_file)
 
     JsonPath.on(post_json, "$.result.children[*]").each do |comment_json|
       post_comment = create_comment(post, comment_json)
+      img_to_attachment(post_comment, :rich_content)
       print "c"
       if comment_json["children"].any?
         comment_json["children"].each do |reply_json|
