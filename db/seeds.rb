@@ -45,6 +45,29 @@ def comment_content(comment_json)
   content
 end
 
+def img_to_attachment(record, attr_name)
+  rich_text = record.send(attr_name)
+  if rich_text && rich_text.body.to_s =~ /(<img src="(\S+)?".+?>)/
+    rich_text.body.to_s.scan(/(<img src="(\S+)?".+?>)/).each do |tag, path|
+      if File.exist?("#{Rails.root}/data#{path}")
+        filename = File.basename(path)
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: File.open("#{Rails.root}/data#{path}"),
+          filename: filename
+        )
+        blob.analyze
+        image_path = Rails.application.routes.url_helpers.rails_blob_path(blob, only_path: true)
+        attachment = ActionText::Attachment.from_attachable(blob)
+        rich_text.update(body: ActionText::Content.new(
+          rich_text.body.to_s.gsub(tag, attachment.to_html.gsub(/(filename=\"#{filename}\")/, "url=\"#{image_path}\" #{$1}"))
+        ))
+        print('i')
+      end
+    end
+  end
+end
+
+# start import
 if File.exist?(piazza_feed_file)
   piazza_feed = File.read(piazza_feed_file)
 
@@ -78,6 +101,7 @@ if File.exist?(piazza_feed_file)
       content_type: "rich_content",
     )
     print "p"
+    img_to_attachment(post, :rich_content)
 
     JsonPath.on(post_json, "$.result.children[*]").each do |comment_json|
       post_comment = create_comment(post, comment_json)
@@ -86,6 +110,7 @@ if File.exist?(piazza_feed_file)
         comment_json["children"].each do |reply_json|
           comment = create_comment(post_comment, reply_json)
           print "d"
+          img_to_attachment(comment, :rich_content)
         end
       end
     end
