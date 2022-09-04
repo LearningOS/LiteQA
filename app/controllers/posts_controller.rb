@@ -7,6 +7,11 @@ class PostsController < ApplicationController
   def index
   end
 
+  def cid_redirect
+    @post = Post.find_by(cid: params[:cid])
+    redirect_to @post
+  end
+
   # GET /posts/1 or /posts/1.json
   def show
     @comments = @post.comments
@@ -68,7 +73,7 @@ class PostsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_post
-    @post = Post.find(params[:id])
+    @post = Post.with_rich_text_rich_content_and_embeds.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
