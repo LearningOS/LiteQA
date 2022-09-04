@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  layout -> { 'application' }
   before_action :set_post, only: %i[ show edit update destroy ]
   before_action :set_posts, only: %i[ index show new edit ]
 

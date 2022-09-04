@@ -14,14 +14,35 @@
   </head>
 
   <body>
-    <%= render "shared/navbar" %>
-
     <%= turbo_frame_tag "flash", class: "dark:text-gray-200 min-w-8 hidden sm:block" do %>
       <%= render "shared/flash" %>
     <% end %>
 
-    <div role="main" class="">
-      <%= yield %>
+    <div class="drawer drawer-mobile">
+      <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col">
+        <!-- Navbar -->
+        <%= render "shared/navbar" %>
+
+        <!-- Page content here -->
+        <div role="main" class="">
+          <%= yield %>
+        </div>
+      </div>
+      <div class="drawer-side">
+        <label for="my-drawer-3" class="drawer-overlay"></label>
+        <div class="menu overflow-y-auto w-80 bg-base-100 text-base-content">
+          <!-- Sidebar content here -->
+          <%= yield :sidebar %>
+        </div>
+
+      </div>
     </div>
+
+
+
+
+
+
   </body>
 </html>

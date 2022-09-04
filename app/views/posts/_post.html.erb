@@ -6,10 +6,12 @@
     <%= post.title %>
   </div>
 
-  <div class="break-words">
+  <div class="px-2">
     <% case post.content_type %>
     <% when 'rich_content' %>
-      <%= post.rich_content.to_s %>
+      <div class="max-w-none break-words prose prose-sm md:prose-base prose-a:break-all dark:prose-invert leading-5">
+        <%= post.rich_content.to_s %>
+      </div>
     <% when 'markdown' %>
       <div>
         <%= post.content %>

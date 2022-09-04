@@ -3,6 +3,7 @@ class Comment < ApplicationRecord
   belongs_to :commentable, polymorphic: true
   belongs_to :parent, optional: true, class_name: "Comment"
   has_many :comments, foreign_key: :parent_id, dependent: :destroy
+  default_scope { with_rich_text_rich_content_and_embeds }
 
   has_rich_text :rich_content
 
