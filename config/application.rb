@@ -18,6 +18,5 @@ module Liteqa
     #
     config.time_zone = "Asia/Shanghai"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.assets.paths << Rails.root.join("data", "img")
   end
 end

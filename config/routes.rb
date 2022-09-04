@@ -4,8 +4,6 @@ Rails.application.routes.draw do
   end
   devise_for :users, module: "users"
 
-  get '/img/:name', to: redirect('/assets/%{name}', status: 302)
-
   # Defines the root path route ("/")
   root "posts#index"
 end
