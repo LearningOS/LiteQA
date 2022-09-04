@@ -8,6 +8,10 @@ class Comment < ApplicationRecord
 
   store_accessor :payload, :raw_comment, :type
 
+  def content
+    self.rich_content || self["content"] || ""
+  end
+
   def comments
     Comment.where(commentable: commentable, parent_id: id)
   end
