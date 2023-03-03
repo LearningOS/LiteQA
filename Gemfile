@@ -1,19 +1,19 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "~> 3"
+ruby "~> 3.2"
 
 gem "rails", "~> 7.0"
 gem "sprockets-rails"
 gem "pg", "~> 1.1"
-gem "puma", "~> 5.0"
+gem "puma"
 gem "turbo-rails"
 gem "stimulus-rails"
 gem "jbuilder"
-gem "redis", "~> 4.0"
+gem "redis"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
-gem "image_processing", "~> 1.2"
+gem "image_processing"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -27,7 +27,7 @@ group :development do
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
-  gem "ruby-lsp", "~> 0.2.3"
+  gem "ruby-lsp"
 end
 
 group :test do
@@ -37,7 +37,7 @@ group :test do
   gem "webdrivers"
 end
 
-gem "vite_rails", "~> 3.0"
+gem "vite_rails"
 gem "devise", "~> 4.8"
 gem "auto_increment", "~> 1.5"
 gem "jsonpath", "~> 1.1"
