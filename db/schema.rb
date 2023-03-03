@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_03_163726) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_03_164707) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_163726) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
+
+  create_table "actions", force: :cascade do |t|
+    t.string "action_type", limit: 64, null: false
+    t.string "action_option", limit: 64
+    t.string "target_type", limit: 64
+    t.bigint "target_id"
+    t.string "user_type", limit: 64
+    t.bigint "user_id"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["action_type", "target_type", "target_id", "user_type", "user_id"], name: "uk_action_target_user", unique: true
+    t.index ["target_type", "target_id", "action_type"], name: "index_actions_on_target_type_and_target_id_and_action_type"
+    t.index ["user_type", "user_id", "action_type"], name: "index_actions_on_user_type_and_user_id_and_action_type"
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
