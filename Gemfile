@@ -19,8 +19,9 @@ gem "vite_rails"
 gem "view_component", "~> 2.48"
 gem "commonmarker", "~> 0.23.2"
 
-gem "acts-as-taggable-on", "~> 9.0"
 gem "auto_increment", "~> 1.5"
+gem "acts-as-taggable-on", "~> 9.0"
+gem "paper_trail", "~> 14.0"
 
 gem "jsonpath", "~> 1.1"
 gem "pagy", "~> 5.9"
