@@ -1,7 +1,8 @@
 class Post < ApplicationRecord
   belongs_to :user, optional: true
   has_many :post_tags
-  has_many :tags, :through => :post_tags
+  acts_as_ordered_taggable_on :tags
+  acts_as_ordered_taggable_on :folders
   has_many :comments, as: :commentable
 
   has_rich_text :rich_content

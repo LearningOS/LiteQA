@@ -78,12 +78,6 @@ end
 if File.exist?(piazza_feed_file)
   piazza_feed = File.read(piazza_feed_file)
 
-  puts "add all tags"
-  tags = Tag.insert_all(
-    JsonPath.on(piazza_feed, "$.result.tags.instructor_upd")[0].keys.map { { name: _1 } }
-  )
-  puts "added #{tags.rows.size} tags."
-
   print "import posts "
   JsonPath.on(piazza_feed, "$.result.feed[*]").each do |feed|
     post_id = feed["nr"]
@@ -95,7 +89,8 @@ if File.exist?(piazza_feed_file)
 
     post = Post.create!(
       title: Nokogiri::HTML.parse(feed["subject"]).text,
-      tags: feed["folders"].map { Tag.find_or_create_by!(name: _1) }, # some posts have unseen tag
+      folder_list: feed["folders"],
+      tag_list: feed["tags"],
       raw_feed: feed,
       raw_post: JSON.parse(post_json),
       cid: post_id,
