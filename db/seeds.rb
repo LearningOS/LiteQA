@@ -45,6 +45,10 @@ def comment_content(comment_json)
   content
 end
 
+def parse_html_entities(content)
+  Nokogiri::HTML.parse(content).text
+end
+
 def img_to_attachment(record, attr_name)
   rich_text = record.send(attr_name)
   if rich_text && rich_text.body.to_s =~ /(<img src="(\S+)?".+?>)/
@@ -89,8 +93,8 @@ if File.exist?(piazza_feed_file)
 
     post = Post.create!(
       title: Nokogiri::HTML.parse(feed["subject"]).text,
-      folder_list: feed["folders"],
-      tag_list: feed["tags"],
+      folder_list: feed["folders"].map { |it| parse_html_entities(it) },
+      tag_list: feed["tags"].map { |it| parse_html_entities(it) },
       raw_feed: feed,
       raw_post: JSON.parse(post_json),
       cid: post_id,
