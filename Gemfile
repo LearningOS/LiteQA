@@ -15,6 +15,20 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 gem "image_processing"
 
+gem "vite_rails"
+gem "view_component", "~> 2.48"
+gem "commonmarker", "~> 0.23.2"
+
+gem "acts-as-taggable-on", "~> 9.0"
+gem "auto_increment", "~> 1.5"
+
+gem "jsonpath", "~> 1.1"
+gem "pagy", "~> 5.9"
+
+gem "devise", "~> 4.8"
+gem "omniauth-github", "~> 2.0"
+gem "omniauth-rails_csrf_protection"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
@@ -26,7 +40,7 @@ group :development do
   gem "web-console"
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  # gem "rack-mini-profiler"
+  gem "rack-mini-profiler"
   gem "ruby-lsp"
 end
 
@@ -36,14 +50,3 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
-
-gem "acts-as-taggable-on", "~> 9.0"
-gem "vite_rails"
-gem "devise", "~> 4.8"
-gem "auto_increment", "~> 1.5"
-gem "jsonpath", "~> 1.1"
-gem "commonmarker", "~> 0.23.2"
-gem "pagy", "~> 5.9"
-gem "view_component", "~> 2.48"
-gem "omniauth-github", "~> 2.0"
-gem "omniauth-rails_csrf_protection"

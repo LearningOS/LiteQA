@@ -185,6 +185,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.3)
+    rack-mini-profiler (3.0.0)
+      rack (>= 1.2.0)
     rack-protection (3.0.5)
       rack
     rack-proxy (0.7.6)
@@ -334,6 +336,7 @@ DEPENDENCIES
   pagy (~> 5.9)
   pg (~> 1.1)
   puma
+  rack-mini-profiler
   rails (~> 7.0)
   redis
   ruby-lsp
