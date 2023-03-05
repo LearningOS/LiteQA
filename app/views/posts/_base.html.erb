@@ -2,7 +2,7 @@
   <div id="posts_feed">
     <%= link_to "New post", new_post_path, class: "btn btn-primary btn-sm m-2", data: { "turbo-frame": "main_frame", "turbo-action": "advance" } %>
     <turbo-frame id="posts" class="block absolute bottom-0 w-full h-[calc(100%-3rem)] overflow-y-scroll overflow-x-clip">
-      <% if @pinned_posts %>
+      <% if @pinned_posts&.any? %>
         <div data-controller='toggle' class="">
           <div data-action='click->toggle#toggle touch->toggle#toggle' class="px-2 py-1 bg-neutral text-neutral-content text-xs font-medium">
             pinned
@@ -32,7 +32,7 @@
           </div>
         </div>
       <% end %>
-      <% if @pagy.next %>
+      <% if @pagy&.next %>
         <%= turbo_frame_tag "posts", loading: :lazy, src: posts_path(page: @pagy.next) do %>
           <!--- put your loading prompt and/or spinner here --->
         <% end %>

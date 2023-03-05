@@ -67,8 +67,13 @@ class PostsController < ApplicationController
   private
 
   def set_posts
-    @pinned_posts = Post.pinned unless params[:page]
-    @pagy, @posts = pagy(Post.unpinned, items: 100)
+    if params[:folders]
+      @pinned_posts = []
+      @posts = Post.tagged_with(params[:folders]).distinct
+    else
+      @pinned_posts = Post.pinned unless params[:page]
+      @pagy, @posts = pagy(Post.unpinned, items: 100)
+    end
   end
 
   # Use callbacks to share common setup or constraints between actions.
